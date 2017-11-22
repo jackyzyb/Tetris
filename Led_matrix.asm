@@ -21,7 +21,7 @@ main:	clrf TRISC   ;PORTC controls led data
 		clrf PORTC
 		clrf TRISD   ;PORTD controls column
 		clrf PORTD
-		lfsr 0,led_data
+		lfsr 0,led_data0
 		movlb 0x1
 		movlw 0x10
 		movwf count
@@ -32,25 +32,28 @@ init0:	movff count,POSTINC0
 		movlw 0x8    ;initialization
 		movwf column  
 		lfsr 0,led_data1
-led1:	movff column,PORTD
-		movff POSTINC0,PORTC
+loop:	call display
 		call delay
+		bra loop
+
+display:
+		movff column,PORTD
+		movff POSTINC0,PORTC
 		incf column,f
 		movf column,w
 		xorlw 0x10
 		bnz led1
 		lfsr 0,led_data0
-led0:	movff column,PORTD
-		movff POSTINC0,PORTC
-		call delay
-		incf column,f
-		movf column,w
+		bra exit_display
+led1	movf column,w
 		xorlw 0x18
-		bnz led0
+		bnz exit_display
 		movlw 0x8
 		movwf column
-		lfsr 0,led_data1
-		bra led1
+		lfsr 0,led_data1		
+exit_display
+		return
+
 
 delay:	movlw d'0'
 		movwf delay_h
