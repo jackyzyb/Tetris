@@ -1,0 +1,7 @@
+; function declare
+    extern	KEY
+   
+
+    
+
+
