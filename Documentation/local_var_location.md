@@ -1,0 +1,3 @@
+## 为了不冲突本地变量
+* key.asm used: 0x20 to 0x27
+* pause.asm used: 0x01 to 0x02

@@ -1,6 +1,3 @@
-; function declare
-    extern	KEY
-   
 
     
 

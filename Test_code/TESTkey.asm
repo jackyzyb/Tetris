@@ -8,7 +8,7 @@ LIST	P=18F4520
     
 ; function declare 
     extern	INITIALIZE
-    extern	KEY, PAUSE
+    extern	KEY
    
 ; temp
     cblock	0x10
@@ -17,22 +17,54 @@ LIST	P=18F4520
     
 
 org 0x000
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    
     goto MAIN
   
-    
-    ORG 0x0008			; Interrupt, press pin 4 (start from pin0) to escape from pause
-    BTFSC INTCON,INT0IF
-    call PAUSE
-    RETFIE
-    
-    
-    
 org 0x100
     MAIN:
     ; main codes here
     call    INITIALIZE
     
-     
+    movlw   b'00000001'
+    movwf   PORTC
+    LOOP:
+	call	KEY
+	movf	KEY_left,f
+	bz	NEXT_R
+	incf	PORTC,f
+	clrf	KEY_left
+	NEXT_R:
+        movf	KEY_right,f
+	bz	NEXT_D
+	decf	PORTC,f
+	clrf	KEY_right
+	NEXT_D:
+        movf	KEY_down,f
+	bz	NEXT_S
+	incf	PORTC,f
+	clrf	KEY_down
+	NEXT_S:
+        movf	KEY_shape,f
+	bz	NEXT
+	incf	PORTC,f
+	clrf	KEY_shape
+	NEXT:
+	;call	DELAY
+	goto	LOOP
+
 	
 	
 DELAY
