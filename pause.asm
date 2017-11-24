@@ -5,7 +5,7 @@
    
     code
     PAUSE
-	call	RANDOM
+	call	RANDOM	    ; also help tp make random_seed more random
 	BCF INTCON,INT0IF
 	PAUSE_LOOP:
 	btfss	PORTB,4	    ; press pin 4 (start from pin0) to skip from pause

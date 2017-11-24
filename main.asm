@@ -33,9 +33,9 @@ org 0x100
     call    INITIALIZE
     
     BEGIN:
-	call	RANDOM	    ; random number put in WREG
+	call	RANDOM	    ; generate a random number ranage from 0 to 6 in WREG
 	 
-     
+	
 	
 	
 DELAY
