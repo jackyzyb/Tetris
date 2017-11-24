@@ -1,13 +1,14 @@
 #include <global_var_declare.inc>
 #include <P18F4520.INC>
-    
+    extern  RANDOM
     global	PAUSE
    
     code
     PAUSE
+	call	RANDOM
 	BCF INTCON,INT0IF
 	PAUSE_LOOP:
-	btfss	PORTB,4	    ; press pin 5 (PORTB, 4) to skip from pause
+	btfss	PORTB,4	    ; press pin 4 (start from pin0) to skip from pause
 	return
 	call	delay
 	goto	PAUSE_LOOP

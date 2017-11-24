@@ -8,7 +8,7 @@ LIST	P=18F4520
     
 ; function declare 
     extern	INITIALIZE
-    extern	KEY, PAUSE
+    extern	KEY, PAUSE, RANDOM
    
 ; temp
     cblock	0x10
@@ -29,9 +29,12 @@ org 0x000
     
 org 0x100
     MAIN:
-    ; main codes here
+		; main codes here
     call    INITIALIZE
     
+    BEGIN:
+	call	RANDOM	    ; random number put in WREG
+	 
      
 	
 	

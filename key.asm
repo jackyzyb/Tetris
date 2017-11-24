@@ -11,6 +11,7 @@
 
 #include <P18F4520.INC>
 #include "global_var_declare.inc"
+extern	random_seed
 key_response_count_max equ 0x5
  
 cblock	0x20	  
@@ -39,6 +40,8 @@ KEY_LEFT_DETECT:
 	bra	KEY_RIGHT_DETECT
 	
     PIN_ACT_LEFT:
+	movlw	d'11'
+	addwf	random_seed,f
 	decf	count_l,f
 	bnz	KEY_RIGHT_DETECT
 	movf	flag_l,f
@@ -57,6 +60,8 @@ KEY_RIGHT_DETECT:
 	bra	KEY_DOWN_DETECT
 	
     PIN_ACT_RIGHT:
+	movlw	d'13'
+	addwf	random_seed,f
 	decf	count_r,f
 	bnz	KEY_DOWN_DETECT
 	movf	flag_r,f
@@ -75,6 +80,8 @@ KEY_DOWN_DETECT:
 	bra	KEY_ROTATE_DETECT
 	
     PIN_ACT_DOWN:
+	movlw	d'23'
+	addwf	random_seed,f
 	decf	count_d,f
 	bnz	KEY_ROTATE_DETECT
 	movf	flag_d,f
@@ -92,6 +99,8 @@ KEY_ROTATE_DETECT:
 	bra	FINISH
 	
     PIN_ACT_ROTATE:
+	movlw	d'43'
+	addwf	random_seed,f
 	decf	count_s,f
 	bnz	FINISH
 	movf	flag_s,f
