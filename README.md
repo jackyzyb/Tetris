@@ -1,5 +1,6 @@
-# Tetris
-Tetris implemented on PIC18
+# Tetris 
+* 对8个按键（0-7）：
+    * 0: 暂停. 1:保留。   2:保留。    3:左移。 4:开始。    5:旋转。  6:下降。   7:右移
 
 ## 关于多文件
 * 函数`example_func`在各自的 .asm 文件写好，里面声明`global examble_func`. 然后在`func_declare.inc` 中声明`extern example_func`. 这样只需要在主文件中`#include <func_declare.inc>` 即可直接使用子函数。
