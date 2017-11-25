@@ -26,5 +26,22 @@ INITIALIZE
     clrf    KEY_right
     clrf    KEY_down
     clrf    KEY_shape
+	
+	movlw 0x10    ;initialize led matrix
+	movwf column  
+	movlw 0x3
+	movwf led_loc
+	lfsr 0,background
+	
+	movlw 0x0
+	movwf TBLPTRU
+	movlw 0x3
+	movwf TBLPTRH
+	movlw 0x0
+	movwf TBLPTRL
+	
+	movlw d'10'
+	movwf max_count
+	
     return
 end
