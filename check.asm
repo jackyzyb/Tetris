@@ -1,9 +1,8 @@
 #include<P18F4520.INC>
 #include<global_var_declare.inc>
 
-temp1 EQU 0x71
-temp2 EQU 0x72
-temp3 EQU 0x73	
+temp1 EQU 0x50
+temp2 EQU 0x51
 
 global CHECK
 
@@ -12,22 +11,18 @@ CHECK:
 	movf y,w
 	xorlw 0x10
 	bz out0
-	movf TBLPTRL,w
-	movwf temp1
-	addwf shape_number,w
-	movwf TBLPTRL
-	movff y,temp2
-	movlw 0x3
-	movwf temp3
-	addwf temp2,f
-	addwf TBLPTRL,f
-loop	movf PLUSW0,w
-		decf temp2,f
-		TBLRD*-
-		andwf TABLAT,w
+	lfsr 1,block_data
+	clrf temp1
+	movf y,w
+	movwf temp2
+loop	movf temp2,w
+		movf PLUSW0,w
+		andwf POSTINC1,w
 		bnz out0
-		decf temp3,f
-		bnn loop
+		incf temp1,f
+		movlw 0x4
+		xorwf temp1,w
+		bnz loop
 	movlw 0x1
 	return
 out0:

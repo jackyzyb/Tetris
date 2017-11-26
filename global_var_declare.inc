@@ -8,9 +8,10 @@ cblock 0x80
 	KEY_count
 	x            ;times of shift right
 	y            ;location of the block
-	type_number  ;type of block
 	shape_number ;shape of block
 	background:d'19'
+	block_data:0x4
+	block_temp:0x4
 	led_loc
 	column
 	led_out

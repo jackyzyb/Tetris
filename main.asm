@@ -17,6 +17,10 @@ LIST	P=18F4520
 ; temp
     cblock	0x10
 		down_count
+		temp1
+		temp2
+		temp3
+		temp4
 	endc
     
 
@@ -44,18 +48,38 @@ loop2:
 	movf KEY_left,w      ;check if press left
 	bz check_right
 	clrf KEY_left
-	incf x,f
+	decf x,f
+	bn check_right
+	call backup
+	lfsr 1,block_data
+	rlncf POSTINC1,f 
+	rlncf POSTINC1,f 
+	rlncf POSTINC1,f 
+	rlncf POSTINC1,f 
 	call CHECK
 	bnz check_right
-	decf x,f
+	incf x,f
+	call restore
 check_right:
 	movf KEY_right,w      ;check if press right
 	bz check_shape
 	clrf KEY_right
-	decf x,f
+	incf x,f
+	call backup
+	lfsr 1,block_data
+	bcf STATUS,C
+	rrcf POSTINC1,f
+	bc check_shape
+	rrcf POSTINC1,f
+	bc check_shape
+	rrcf POSTINC1,f
+	bc check_shape
+	rrcf POSTINC1,f
+	bc check_shape
 	call CHECK
 	bnz check_shape
-	incf x,f
+	decf x,f
+	call restore
 check_shape:
 	movf KEY_shape,w       ;check if press rotate
 	bz check_down
@@ -64,12 +88,34 @@ check_shape:
 	addwf shape_number,f
 	movlw 0xF
 	andwf shape_number,f
+	call backup
+	movff TBLPTRL,temp1
+	movf shape_number,w
+	addwf TBLPTRL,f
+	lfsr 1,block_data
+	movlw 0x4
+	movwf temp2
+loop3:
+	TBLRD*+
+	movff TABLAT,temp3
+	movff x,temp4
+	bz loop4_out
+loop4:
+	rrncf temp3,f 
+	decf temp4,f 
+	bnz loop4
+loop4_out:
+	movff temp3,POSTINC1
+	decf temp2,f
+	bnz loop3
+	movff temp1,TBLPTRL
 	call CHECK
 	bnz check_down
 	movlw -d'4'
 	addwf shape_number,f
 	movlw 0xF
 	andwf shape_number,f 
+	call restore
 check_down:
 	movf KEY_down,w        ;check if press down
 	bnz fall_down 
@@ -95,7 +141,25 @@ exit:
 game_over:
 	goto game_over
 	
+
+backup:
+	lfsr 1,block_data
+	lfsr 2,block_temp
+	movff POSTINC1,POSTINC2
+ 	movff POSTINC1,POSTINC2
+	movff POSTINC1,POSTINC2
+	movff POSTINC1,POSTINC2
+	return
 	
+restore:
+	lfsr 1,block_data
+	lfsr 2,block_temp
+	movff POSTINC2,POSTINC1
+	movff POSTINC2,POSTINC1
+	movff POSTINC2,POSTINC1
+	movff POSTINC2,POSTINC1
+	return
+
 
 org 0x300
 Tetris_table:

@@ -3,7 +3,6 @@
 #include <P18F4520.INC>
 #include <global_var_declare.inc>
 
-temp EQU 0x70
 
 global	DISPLAY
 
@@ -20,10 +19,9 @@ DISPLAY:
 		sublw 0x3
 		bn out            ;if led_loc-y>3
 		sublw 0x3         ;w=led_loc-y
-		addwf  TBLPTRL
-		TBLRD*
-		movf TABLAT,w
-		andwf led_out,f
+		lfsr 1,block_data
+		movf PLUSW1,w    ;block_data[led_loc-y]
+		iorwf led_out,f
 out:	movff column,PORTD
 		movff led_out,PORTC
 		incf led_loc,f
