@@ -7,11 +7,11 @@ cblock 0x60
 endc
 code
 DELAY:
-		movlw d'40'
+		movlw d'4'
 		movwf delay_h
-delay1:	movlw d'0'
+delay1:	movlw d'10'
 		movwf delay_l
-delay2:	movlw d'0'
+delay2:	movlw d'10'
 		movwf delay_u
 delay3:	decf delay_u,f
 		bnz delay3

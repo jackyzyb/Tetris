@@ -15,5 +15,7 @@ cblock 0x80
 	led_loc
 	column
 	led_out
-	max_count
+	down_count1
+	down_count2
+	random_seed
 endc

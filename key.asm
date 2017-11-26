@@ -1,9 +1,9 @@
 ; use PORTB as keys action input port
 ; pin 0~2 reserve for interupt
-; pin 3: move left
-; pin 7: move right
-; pin 6: move down
-; pin 5: rotate
+; pin 7: move left
+; pin 3: move right
+; pin 5: move down
+; pin 6: rotate
     
 ; to detect key responses in main.asm, just check whether the global varibals (KEY_left...)
 ; 0 means nothing, non zero means there is a signal. (don't forget to set the corresponding global variables to 0 again)
@@ -11,7 +11,6 @@
 
 #include <P18F4520.INC>
 #include "global_var_declare.inc"
-extern	random_seed
 key_response_count_max equ 0x5
  
 cblock	0x20	  
@@ -32,7 +31,7 @@ code
 KEY
     
 KEY_LEFT_DETECT:
-    btfss   PORTB, 3
+    btfss   PORTB, 7
     bra	    PIN_ACT_LEFT
 	movlw   key_response_count_max
 	movwf   count_l
@@ -52,7 +51,7 @@ KEY_LEFT_DETECT:
 	
 
 KEY_RIGHT_DETECT:
-    btfss   PORTB, 7
+    btfss   PORTB, 3
     bra	    PIN_ACT_RIGHT
 	movlw   key_response_count_max
 	movwf   count_r
@@ -72,7 +71,7 @@ KEY_RIGHT_DETECT:
 	
 	
 KEY_DOWN_DETECT:
-    btfss   PORTB, 6
+    btfss   PORTB, 5
     bra	    PIN_ACT_DOWN
 	movlw   key_response_count_max
 	movwf   count_d
@@ -91,7 +90,7 @@ KEY_DOWN_DETECT:
 	
 	
 KEY_ROTATE_DETECT:
-    btfss   PORTB, 5
+    btfss   PORTB, 6
     bra	    PIN_ACT_ROTATE
 	movlw   key_response_count_max
 	movwf   count_s
@@ -113,5 +112,3 @@ FINISH:
     return
 end
     
-
-

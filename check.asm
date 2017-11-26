@@ -20,12 +20,14 @@ loop	movf temp2,w
 		andwf POSTINC1,w
 		bnz out0
 		incf temp1,f
+		incf temp2,f
 		movlw 0x4
 		xorwf temp1,w
 		bnz loop
 	movlw 0x1
+	andlw 0x1
 	return
 out0:
-	movlw 0x0
+	andlw 0x0
 	return
 end

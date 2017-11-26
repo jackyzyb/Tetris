@@ -16,7 +16,6 @@ LIST	P=18F4520
 	
 ; temp
     cblock	0x10
-		down_count
 		temp1
 		temp2
 		temp3
@@ -69,15 +68,16 @@ check_right:
 	lfsr 1,block_data
 	bcf STATUS,C
 	rrcf POSTINC1,f
-	bc check_shape
+	bc back
 	rrcf POSTINC1,f
-	bc check_shape
+	bc back
 	rrcf POSTINC1,f
-	bc check_shape
+	bc back
 	rrcf POSTINC1,f
-	bc check_shape
+	bc back
 	call CHECK
 	bnz check_shape
+back:
 	decf x,f
 	call restore
 check_shape:
@@ -101,7 +101,10 @@ loop3:
 	movff x,temp4
 	bz loop4_out
 loop4:
-	rrncf temp3,f 
+	movlw 0x1
+	andwf temp3,w
+	bnz turn_back
+	rrncf temp3,f
 	decf temp4,f 
 	bnz loop4
 loop4_out:
@@ -111,6 +114,8 @@ loop4_out:
 	movff temp1,TBLPTRL
 	call CHECK
 	bnz check_down
+turn_back:
+	movff temp1,TBLPTRL
 	movlw -d'4'
 	addwf shape_number,f
 	movlw 0xF
@@ -119,12 +124,18 @@ loop4_out:
 check_down:
 	movf KEY_down,w        ;check if press down
 	bnz fall_down 
-	movf down_count,w
-	xorwf max_count,w
+	movf down_count1,w
+	bnz exit
+	movlw d'100'
+	movwf down_count1
+	movf down_count2,w
 	bnz exit
 fall_down:
 	clrf KEY_down
-	clrf down_count
+	movlw d'100'
+	movwf down_count1
+	movlw d'6'
+	movwf down_count2
 	incf y,f 
 	call CHECK
 	bnz exit
@@ -133,7 +144,10 @@ fall_down:
 	goto loop1
 	
 exit:
-	incf down_count,f
+	decf down_count1,f
+	bnz led_display
+	decf down_count2,f
+led_display:
 	call DISPLAY
 	call DELAY
 	goto loop2
@@ -163,150 +177,41 @@ restore:
 
 org 0x300
 Tetris_table:
-db b'00000000'       ;I-type
-db b'00000000'
-db b'00000000'
-db b'11110000'
-
-db b'10000000'
-db b'10000000'
-db b'10000000'
-db b'10000000'
-
-db b'00000000'
-db b'00000000'
-db b'00000000'
-db b'11110000'
-	
-db b'10000000'
-db b'10000000'
-db b'10000000'
-db b'10000000'
-
-db b'00000000'      ;L-type
-db b'10000000'
-db b'10000000'
-db b'11000000'
-
-db b'00000000'
-db b'00000000'
-db b'11100000'
-db b'10000000'
-
-db b'00000000'
-db b'11000000'
-db b'01000000'
-db b'01000000'
-
-db b'00000000'
-db b'00000000'
-db b'00100000'
-db b'11100000'
-
-db b'00000000'       ;J-type
-db b'01000000'
-db b'01000000'
-db b'11000000'
-
-
-db b'00000000'
-db b'00000000'
-db b'10000000'
-db b'11100000'
-
-db b'00000000'
-db b'11000000'
-db b'10000000'
-db b'10000000'
-
-db b'00000000'
-db b'00000000'
-db b'11100000'
-db b'00100000'
-
-db b'00000000'       ;S-type
-db b'00000000'
-db b'01100000'
-db b'11000000'
-
-
-db b'00000000'
-db b'10000000'
-db b'11000000'
-db b'01000000'
-
-db b'00000000'
-db b'00000000'
-db b'01100000'
-db b'11000000'
-
-db b'00000000'
-db b'10000000'
-db b'11000000'
-db b'01000000'
-
-db b'00000000'       ;Z-type
-db b'00000000'
-db b'11000000'
-db b'01100000'
-
-
-db b'00000000'
-db b'01000000'
-db b'11000000'
-db b'10000000'
-
-db b'00000000'
-db b'00000000'
-db b'11000000'
-db b'01100000'
-
-db b'00000000'
-db b'01000000'
-db b'11000000'
-db b'10000000'
-
-db b'00000000'       ;T-type
-db b'00000000'
-db b'11100000'
-db b'01000000'
-
-
-db b'00000000'
-db b'01000000'
-db b'11000000'
-db b'01000000'
-
-db b'00000000'
-db b'00000000'
-db b'01000000'
-db b'11100000'
-
-db b'00000000'
-db b'10000000'
-db b'11000000'
-db b'10000000'
-
-db b'00000000'       ;#-type
-db b'00000000'
-db b'11000000'
-db b'11000000'
-
-
-db b'00000000'
-db b'00000000'
-db b'11000000'
-db b'11000000'
-
-db b'00000000'
-db b'00000000'
-db b'11000000'
-db b'11000000'
-
-db b'00000000'
-db b'00000000'
-db b'11000000'
-db b'11000000'
+;I-type
+db b'00000000',b'00000000',b'00000000',b'11110000'       
+db b'10000000',b'10000000',b'10000000',b'10000000'
+db b'00000000',b'00000000',b'00000000',b'11110000'
+db b'10000000',b'10000000',b'10000000',b'10000000'
+;L-type
+db b'00000000',b'10000000',b'10000000',b'11000000'
+db b'00000000',b'00000000',b'11100000',b'10000000'
+db b'00000000',b'11000000',b'01000000',b'01000000'
+db b'00000000',b'00000000',b'00100000',b'11100000'
+;J-type
+db b'00000000',b'01000000',b'01000000',b'11000000'
+db b'00000000',b'00000000',b'10000000',b'11100000'
+db b'00000000',b'11000000',b'10000000',b'10000000'
+db b'00000000',b'00000000',b'11100000',b'00100000'
+;S-type
+db b'00000000',b'00000000',b'01100000',b'11000000'
+db b'00000000',b'10000000',b'11000000',b'01000000'
+db b'00000000',b'00000000',b'01100000',b'11000000'
+db b'00000000',b'10000000',b'11000000',b'01000000'
+;Z-type
+db b'00000000',b'00000000',b'11000000',b'01100000'
+db b'00000000',b'01000000',b'11000000',b'10000000'
+db b'00000000',b'00000000',b'11000000',b'01100000'
+db b'00000000',b'01000000',b'11000000',b'10000000'
+;T-type
+db b'00000000',b'00000000',b'11100000',b'01000000'
+db b'00000000',b'01000000',b'11000000',b'01000000'
+db b'00000000',b'00000000',b'01000000',b'11100000'
+db b'00000000',b'10000000',b'11000000',b'10000000'
+;#-type
+db b'00000000',b'00000000',b'11000000',b'11000000'
+db b'00000000',b'00000000',b'11000000',b'11000000'
+db b'00000000',b'00000000',b'11000000',b'11000000'
+db b'00000000',b'00000000',b'11000000',b'11000000'
 
 	
 end

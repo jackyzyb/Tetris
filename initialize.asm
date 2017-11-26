@@ -2,7 +2,7 @@
 #include <P18F4520.INC>
 #include <global_var_declare.inc>
 
-    
+temp EQU 0x30
   
     
     global	INITIALIZE
@@ -32,6 +32,12 @@ INITIALIZE
 	movlw 0x3
 	movwf led_loc
 	lfsr 0,background
+	lfsr 1,block_data
+	lfsr 2,block_temp
+	movlw 0x12
+loop:	clrf PLUSW0
+		addlw -d'1'
+		bnn loop
 	
 	movlw 0x0
 	movwf TBLPTRU
@@ -40,8 +46,11 @@ INITIALIZE
 	movlw 0x0
 	movwf TBLPTRL
 	
-	movlw d'10'
-	movwf max_count
-	
+	movlw d'100'
+	movwf down_count1
+	movlw d'6'
+	movwf down_count2
+	movlw 0x1
+	movwf random_seed
     return
 end

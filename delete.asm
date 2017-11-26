@@ -16,7 +16,9 @@ loop:
 	movf y,w
 	movf PLUSW0,w
 	iorwf POSTINC1,w
-	movwf PLUSW0
+	movwf temp1
+	movf y,w
+	movff temp1,PLUSW0
 	incf y,f
 	decf temp
 	bnz loop
