@@ -16,6 +16,8 @@ INITIALIZE
     clrf    PORTD
     MOVLW   0X0F
     MOVWF   ADCON1
+	
+	
     
     BCF INTCON,INT0IF	    ; initialize INT
     BSF INTCON,INT0IE
@@ -50,7 +52,21 @@ loop:	clrf PLUSW0
 	movwf down_count1
 	movlw d'6'
 	movwf down_count2
-	movlw 0x1
+	movlw 0x0
 	movwf random_seed
+	
+RAN_SEED:
+	incf random_seed,f
+	movf	0x31,f
+	bz		NEXT
+	btfss PORTB,4
+	return
+	goto RAN_SEED
+NEXT:
+	btfss PORTB,4
+	goto	RAN_SEED
+	setf	0x31
+	goto	RAN_SEED
+	
     return
 end
