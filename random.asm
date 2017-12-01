@@ -2,7 +2,6 @@
 #include <P18F4520.INC>
     
     global	RANDOM
-    extern	random_seed
    
     code
     RANDOM	    ; generate a random number from 0 to 6

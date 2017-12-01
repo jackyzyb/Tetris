@@ -41,14 +41,15 @@ org 0x100
 loop1:
     call NEW_BLOCK
 	call CHECK
-	bz game_over
+	bz MAIN
 loop2:
 	call KEY
 	movf KEY_left,w      ;check if press left
 	bz check_right
 	clrf KEY_left
+	movf x,f
+	bz check_right
 	decf x,f
-	bn check_right
 	call backup
 	lfsr 1,block_data
 	rlncf POSTINC1,f 
@@ -98,7 +99,8 @@ check_shape:
 loop3:
 	TBLRD*+
 	movff TABLAT,temp3
-	movff x,temp4
+	movf x,w
+	movwf temp4
 	bz loop4_out
 loop4:
 	movlw 0x1
@@ -134,7 +136,7 @@ fall_down:
 	clrf KEY_down
 	movlw d'100'
 	movwf down_count1
-	movlw d'6'
+	movlw d'10'
 	movwf down_count2
 	incf y,f 
 	call CHECK
@@ -151,9 +153,6 @@ led_display:
 	call DISPLAY
 	call DELAY
 	goto loop2
-
-game_over:
-	goto game_over
 	
 
 backup:

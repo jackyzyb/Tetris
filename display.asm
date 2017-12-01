@@ -22,8 +22,9 @@ DISPLAY:
 		lfsr 1,block_data
 		movf PLUSW1,w    ;block_data[led_loc-y]
 		iorwf led_out,f
-out:	movff column,PORTD
+out:	clrf PORTD
 		movff led_out,PORTC
+		movff column,PORTD
 		incf led_loc,f
 		incf column,f
 		movf column,w

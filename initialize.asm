@@ -17,7 +17,8 @@ INITIALIZE
     MOVLW   0X0F
     MOVWF   ADCON1
 	
-	
+	movlw 0x08           ;initialize timer
+	movwf T0CON
     
     BCF INTCON,INT0IF	    ; initialize INT
     BSF INTCON,INT0IE
@@ -50,7 +51,7 @@ loop:	clrf PLUSW0
 	
 	movlw d'100'
 	movwf down_count1
-	movlw d'6'
+	movlw d'10'
 	movwf down_count2
 	movlw 0x0
 	movwf random_seed

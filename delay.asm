@@ -2,22 +2,18 @@
 #include<global_var_declare.inc>
 
 global DELAY
-cblock 0x60
-	delay_u,delay_h,delay_l
-endc
+
 code
 DELAY:
-		movlw d'4'
-		movwf delay_h
-delay1:	movlw d'10'
-		movwf delay_l
-delay2:	movlw d'10'
-		movwf delay_u
-delay3:	decf delay_u,f
-		bnz delay3
-		decf delay_l,f
-		bnz delay2
-		decf delay_h,f
-		bnz delay1
-		return
+	movlw 0xFC
+	movwf TMR0H
+	movlw 0x00
+	movwf TMR0L
+	bcf INTCON,TMR0IF
+	bsf T0CON,TMR0ON
+loop:
+	btfss INTCON,TMR0IF
+	bra loop
+	bcf T0CON,TMR0ON
+	return
 end

@@ -16,22 +16,4 @@
 	call	DELAY
 	goto	PAUSE_LOOP
     
-    
-;    delay:
-;    MOVLW   D'1'
-;   MOVWF   1
-;    back        MOVLW   D'0'
-;   MOVWF   2
-;   here        NOP
-;   NOP
-;   NOP
-;    NOP
-;    NOP
-;    NOP
-;    decf  2, F
-;    BNZ   here
-;    decf  1, F
-;    BNZ  back
-;    return
-    
     end
