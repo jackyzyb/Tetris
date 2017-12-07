@@ -1,4 +1,5 @@
 # Tetris 
+Tetris implemented on PIC18F4520 as the mini project of EE2004.
 ## Required Components
     1. 16*8 Led matrix: Use the Led matrix as the game display interface.
     2.  6 buttons:
